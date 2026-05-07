@@ -43,6 +43,13 @@ class ComparisonReport:
     def is_regression(self) -> bool:
         return self.total_delta > 0
 
+    @property
+    def worst_stage(self) -> Optional[StageDiff]:
+        """Return the StageDiff with the largest absolute duration increase, or None if there are no diffs."""
+        if not self.diffs:
+            return None
+        return max(self.diffs, key=lambda d: d.delta)
+
     def summary(self) -> str:
         lines = [
             f"Query: {self.current.query}",
