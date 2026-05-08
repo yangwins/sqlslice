@@ -50,6 +50,16 @@ class ComparisonReport:
             return None
         return max(self.diffs, key=lambda d: d.delta)
 
+    @property
+    def improved_stages(self) -> List[StageDiff]:
+        """Return all StageDiffs where the current duration is faster than the baseline."""
+        return [d for d in self.diffs if d.delta < 0]
+
+    @property
+    def regressed_stages(self) -> List[StageDiff]:
+        """Return all StageDiffs where the current duration is slower than the baseline."""
+        return [d for d in self.diffs if d.delta > 0]
+
     def summary(self) -> str:
         lines = [
             f"Query: {self.current.query}",
