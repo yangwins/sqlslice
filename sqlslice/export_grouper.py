@@ -56,17 +56,29 @@ def write_group_to_stream(report: GroupReport, stream: IO[str], fmt: str = "json
         An open, writable text stream.
     fmt:
         ``"json"`` (default) or ``"csv"``.
+
+    Raises
+    ------
+    ValueError
+        If *fmt* is not ``"json"`` or ``"csv"``.
     """
     if fmt == "csv":
         stream.write(group_to_csv(report))
-    else:
+    elif fmt == "json":
         stream.write(group_to_json(report))
+    else:
+        raise ValueError(f"Unsupported format {fmt!r}. Expected 'json' or 'csv'.")
 
 
 def save_group(report: GroupReport, path: str, fmt: str = "json") -> None:
     """Persist a GroupReport to *path*.
 
     The parent directory is created if it does not exist.
+
+    Raises
+    ------
+    ValueError
+        If *fmt* is not ``"json"`` or ``"csv"``.
     """
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fh:
